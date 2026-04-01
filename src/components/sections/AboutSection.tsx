@@ -147,7 +147,7 @@ export function AboutSection() {
             className="absolute inset-0 scale-110"
           >
             <Image
-              src="/images/portrait.png"
+              src="/images/potrait.png"
               alt="Bryan Berlandro Godlive Sibuea"
               fill
               className="object-cover object-top grayscale"
