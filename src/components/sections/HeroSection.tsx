@@ -24,15 +24,22 @@ export function HeroSection() {
       {/* Background index number */}
       <span
         aria-hidden
-        className="pointer-events-none absolute top-1/4 right-10 -translate-y-1/2 font-display select-none z-0 leading-none tracking-tighter"
+        className="pointer-events-none absolute top-1/2 right-10 -translate-y-1/2 font-display select-none z-0 leading-none tracking-tighter"
         style={{ fontSize: "clamp(10rem,22vw,24rem)", color: "var(--color-surface)" }}
       >
         01
       </span>
       <span
         aria-hidden
-        className="pointer-events-none absolute top-1/2 right-10 -translate-y-1/2 font-display select-none z-0 leading-none tracking-tighter"
-        style={{ fontSize: "clamp(10rem,12vw,24rem)", color: "var(--color-surface)" }}
+        className="pointer-events-none absolute left-10 bottom-0 md:hidden md:right-10 -translate-y-1/2 font-display select-none z-0 leading-none tracking-tighter"
+        style={{ fontSize: "clamp(5rem,12vw,24rem)", color: "var(--color-surface)" }}
+      >
+        BRYAN BERLANDRO
+      </span>
+      <span
+        aria-hidden
+        className="pointer-events-none absolute hidden md:flex bottom-0 md:right-10 -translate-y-1/2 font-display select-none z-0 leading-none tracking-tighter"
+        style={{ fontSize: "clamp(5rem,12vw,24rem)", color: "var(--color-surface)" }}
       >
         BRYAN BERLANDRO
       </span>

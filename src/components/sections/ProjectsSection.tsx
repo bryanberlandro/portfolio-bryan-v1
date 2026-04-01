@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { projects } from "@/data/portfolio";
+import Image from "next/image";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -101,21 +102,19 @@ export function ProjectsSection() {
                       >
                         {/* Mock thumbnail */}
                         <div
-                          className="w-full rounded-[2px] flex items-center justify-center"
+                          className="w-full rounded-[2px] flex items-center justify-center overflow-hidden"
                           style={{
-                            height: 200,
+                            height: 300,
                             background: p.dark ? "rgba(255,255,255,0.04)" : "rgba(10,10,10,0.04)",
                           }}
                         >
-                          <span
-                            className="font-display tracking-widest opacity-20"
-                            style={{
-                              fontSize: "5rem",
-                              color: p.dark ? "#fff" : "var(--color-ink)",
-                            }}
-                          >
-                            {p.index}
-                          </span>
+                          <Image
+                            src={p.img}
+                            alt={p.name}
+                            width={500}
+                            height={200}
+                            className="object-cover w-full h-full"
+                          />
                         </div>
 
                         <div>

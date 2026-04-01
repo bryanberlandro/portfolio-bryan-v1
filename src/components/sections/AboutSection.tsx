@@ -137,7 +137,7 @@ export function AboutSection() {
           transition={{ duration: 1.1, delay: 0.2, ease }}
           className="relative overflow-hidden shrink-0"
           style={{
-            width: "clamp(220px, 28vw, 340px)",
+            width: "clamp(310px, 28vw, 400px)",
             minHeight: 440,
             background: "#0A0A0A",
           }}
@@ -147,7 +147,7 @@ export function AboutSection() {
             className="absolute inset-0 scale-110"
           >
             <Image
-              src="/images/potrait.png"
+              src="/images/potrait2.jpeg"
               alt="Bryan Berlandro Godlive Sibuea"
               fill
               className="object-cover object-top grayscale"

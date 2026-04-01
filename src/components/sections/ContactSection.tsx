@@ -17,9 +17,9 @@ export function ContactSection() {
       <span
         aria-hidden
         className="pointer-events-none select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display leading-none z-0 tracking-tight"
-        style={{ fontSize: "clamp(6rem,22vw,18rem)", color: "rgba(255,255,255,0.022)", whiteSpace: "nowrap" }}
+        style={{ fontSize: "clamp(6rem,22vw,22rem)", color: "rgba(255,255,255,0.022)", whiteSpace: "nowrap" }}
       >
-        BRYAN BERLANDRO
+        TALK
       </span>
 
       <div className="relative z-10">
@@ -36,11 +36,14 @@ export function ContactSection() {
         </Reveal>
 
         <Reveal delay={0.2}>
-          <p className="text-[0.9rem] leading-[1.8] max-w-[360px] mx-auto mb-4" style={{ color: "rgba(255,255,255,0.4)" }}>
+          <p
+            className="text-[0.9rem] leading-[1.8] max-w-[360px] mx-auto mb-4"
+            style={{ color: "rgba(255,255,255,0.4)" }}
+          >
             Have a project in mind? Let&apos;s build something extraordinary together.
           </p>
-          <a
-            href={`mailto:${personal.email}`}
+          
+          <a  href={`mailto:${personal.email}`}
             className="font-mono text-[0.72rem] tracking-[0.18em] uppercase mb-10 block hover:opacity-60 transition-opacity"
             style={{ color: "rgba(255,255,255,0.3)" }}
           >
@@ -66,9 +69,10 @@ export function ContactSection() {
           </div>
         </Reveal>
 
+        {/* ── Social links — redesigned ── */}
         <Reveal delay={0.4}>
           <div
-            className="flex items-center justify-center gap-8 mt-16 pt-10 flex-wrap"
+            className="mt-16 pt-10 flex items-center justify-center gap-3 flex-wrap"
             style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
           >
             {socials.map((s) => (
@@ -76,10 +80,21 @@ export function ContactSection() {
                 key={s.label}
                 href={s.href}
                 target="_blank"
-                className="font-mono text-[0.6rem] tracking-[0.15em] uppercase transition-colors duration-300 hover:text-white"
-                style={{ color: "rgba(255,255,255,0.28)" }}
+                rel="noopener noreferrer"
+                data-cursor-hover
+                className="group inline-flex items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase px-5 py-[0.6rem] rounded-full border transition-all duration-300 hover:bg-white hover:border-white"
+                style={{
+                  borderColor: "rgba(255,255,255,0.18)",
+                  color: "rgba(255,255,255,0.6)",
+                }}
               >
-                {s.label}
+                <span
+                  className="w-[5px] h-[5px] rounded-full shrink-0 transition-colors duration-300 group-hover:bg-ink"
+                  style={{ background: "rgba(255,255,255,0.3)" }}
+                />
+                <span className="transition-colors duration-300 group-hover:text-ink">
+                  {s.label}
+                </span>
               </Link>
             ))}
           </div>
