@@ -31,23 +31,19 @@ export function ProjectsSection() {
         </Reveal>
       </div>
 
-      {/* Project list */}
       <Reveal>
         <div className="border-t" style={{ borderColor: "rgba(10,10,10,0.1)" }}>
           {projects.map((p, i) => (
             <div key={p.id}>
-              {/* Row */}
               <button
                 className="project-row w-full text-left py-7 flex items-center gap-6 group"
                 onClick={() => setActive(active === p.id ? null : p.id)}
                 data-cursor-hover
               >
-                {/* Index */}
                 <span className="font-mono text-[0.6rem] tracking-[0.15em] shrink-0 w-6" style={{ color: "var(--color-muted)" }}>
                   {p.index}
                 </span>
 
-                {/* Name */}
                 <span
                   className="font-display tracking-wide flex-1 transition-all duration-300 group-hover:pl-1"
                   style={{ fontSize: "clamp(1.6rem,3.5vw,2.6rem)", color: "var(--color-ink)" }}
@@ -55,19 +51,16 @@ export function ProjectsSection() {
                   {p.name}
                 </span>
 
-                {/* Tags - hidden on mobile */}
                 <div className="hidden md:flex gap-2 items-center">
                   {p.tags.map((t) => (
                     <span key={t} className="skill-tag">{t}</span>
                   ))}
                 </div>
 
-                {/* Year */}
                 <span className="font-mono text-[0.6rem] tracking-[0.14em] shrink-0 hidden sm:block" style={{ color: "var(--color-muted)" }}>
                   {p.year}
                 </span>
 
-                {/* Expand arrow */}
                 <motion.div
                   className="shrink-0 w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300"
                   style={{ borderColor: "rgba(10,10,10,0.12)" }}
@@ -80,7 +73,6 @@ export function ProjectsSection() {
                 </motion.div>
               </button>
 
-              {/* Expanded Detail Panel */}
               <AnimatePresence initial={false}>
                 {active === p.id && (
                   <motion.div
@@ -95,12 +87,10 @@ export function ProjectsSection() {
                       className="grid grid-cols-1 lg:grid-cols-3 gap-[1.5px] mb-7"
                       style={{ background: "rgba(10,10,10,0.08)" }}
                     >
-                      {/* Left: thumbnail placeholder + description */}
                       <div
                         className="lg:col-span-2 p-8 flex flex-col gap-6"
                         style={{ background: p.dark ? "#0A0A0A" : "var(--color-paper)" }}
                       >
-                        {/* Mock thumbnail */}
                         <div
                           className="w-full rounded-[2px] flex items-center justify-center overflow-hidden"
                           style={{
@@ -132,7 +122,6 @@ export function ProjectsSection() {
                           </p>
                         </div>
 
-                        {/* Links */}
                         <div className="flex gap-3 flex-wrap mt-auto">
                           {p.liveUrl && (
                             <Link
@@ -166,7 +155,6 @@ export function ProjectsSection() {
                         </div>
                       </div>
 
-                      {/* Right: meta */}
                       <div
                         className="p-8 flex flex-col gap-8"
                         style={{ background: "var(--color-surface)" }}

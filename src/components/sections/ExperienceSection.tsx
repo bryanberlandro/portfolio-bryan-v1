@@ -21,7 +21,6 @@ export function ExperienceSection() {
               className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-0 group"
               style={{ background: "var(--color-surface)" }}
             >
-              {/* Left: meta */}
               <div
                 className="px-8 py-10 border-r flex flex-col justify-between"
                 style={{ borderColor: "rgba(10,10,10,0.08)" }}
@@ -39,7 +38,6 @@ export function ExperienceSection() {
                 </p>
               </div>
 
-              {/* Right: detail */}
               <div className="px-8 py-10">
                 <p
                   className="font-mono text-[0.6rem] tracking-[0.14em] uppercase mb-4"

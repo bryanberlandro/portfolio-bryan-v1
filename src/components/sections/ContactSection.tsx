@@ -13,7 +13,6 @@ export function ContactSection() {
       style={{ background: "#0A0A0A" }}
       data-cursor-dark
     >
-      {/* Watermark */}
       <span
         aria-hidden
         className="pointer-events-none select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display leading-none z-0 tracking-tight"
@@ -69,7 +68,6 @@ export function ContactSection() {
           </div>
         </Reveal>
 
-        {/* ── Social links — redesigned ── */}
         <Reveal delay={0.4}>
           <div
             className="mt-16 pt-10 flex items-center justify-center gap-3 flex-wrap"

@@ -1,6 +1,3 @@
-// ─── PORTFOLIO DATA ─────────────────────────────────────────────────
-// Edit this file to customise all content across the portfolio.
-
 export const personal = {
   name: "Bryan Berlandro Godlive Sibuea",
   role: "Designer & Developer",

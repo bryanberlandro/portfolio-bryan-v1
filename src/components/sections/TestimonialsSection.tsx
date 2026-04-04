@@ -24,7 +24,6 @@ export function TestimonialsSection() {
               className="flex flex-col justify-between p-10 h-full group transition-colors duration-300 hover:bg-[--color-surface]"
               style={{ background: "var(--color-paper)" }}
             >
-              {/* Quote mark */}
               <span
                 className="font-display leading-none mb-6 block"
                 style={{ fontSize: "4rem", color: "rgba(10,10,10,0.08)" }}

@@ -8,7 +8,6 @@ import { toolCategories } from "@/data/portfolio";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-// Visual weight per category — controls font size of each tag
 const sizeMap: Record<string, string> = {
   Design:      "text-[1.05rem]",
   Development: "text-[1.2rem]",
@@ -16,7 +15,6 @@ const sizeMap: Record<string, string> = {
   Other:       "text-[0.88rem]",
 };
 
-// Subtle bg tint per category on hover
 const hoverBg: Record<string, string> = {
   Design:      "hover:bg-[#0A0A0A]",
   Development: "hover:bg-[#0A0A0A]",
@@ -26,7 +24,6 @@ const hoverBg: Record<string, string> = {
 
 type Tool = { name: string; category: string };
 
-// Flatten all tools into one array, preserve category info
 const allTools: Tool[] = toolCategories.flatMap((cat) =>
   cat.tools.map((name) => ({ name, category: cat.category }))
 );
@@ -47,7 +44,6 @@ export function SkillsSection() {
       className="px-10 py-28"
       style={{ background: "var(--color-paper)" }}
     >
-      {/* Header */}
       <Reveal>
         <SectionLabel>Skills &amp; Tools</SectionLabel>
       </Reveal>
@@ -68,7 +64,6 @@ export function SkillsSection() {
         </div>
       </Reveal>
 
-      {/* Filter pills */}
       <Reveal delay={0.2}>
         <div className="mt-12 flex items-center gap-2 flex-wrap">
           {categories.map((cat) => {

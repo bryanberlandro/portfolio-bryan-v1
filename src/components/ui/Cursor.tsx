@@ -18,7 +18,6 @@ export function Cursor() {
         dotRef.current.style.left = `${e.clientX}px`;
         dotRef.current.style.top  = `${e.clientY}px`;
       }
-      // Check if over dark bg
       const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
       setDark(!!el?.closest("[data-cursor-dark]"));
     };

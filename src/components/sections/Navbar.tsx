@@ -19,14 +19,12 @@ export function Navbar() {
   const [menuOpen, setMenuOpen]     = useState(false);
   const [activeSection, setActive]  = useState("");
 
-  // ── Scroll detection ──
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // ── Active section via IntersectionObserver ──
   useEffect(() => {
     const ids = links.map((l) => l.href.replace("#", ""));
     const observers: IntersectionObserver[] = [];
@@ -45,7 +43,6 @@ export function Navbar() {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  // ── Lock body scroll when menu open ──
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -73,13 +70,11 @@ export function Navbar() {
       >
         <div className="flex items-center justify-between px-10 h-16">
 
-          {/* ── Logo ── */}
           <Link
             href="/"
             className="flex items-center gap-3 group"
             onClick={() => setMenuOpen(false)}
           >
-            {/* Logo mark */}
             <div
               className="w-7 h-7 rounded-full flex items-center justify-center transition-colors duration-300 group-hover:bg-[--color-ink]"
               style={{ border: "1.5px solid var(--color-ink)" }}
@@ -99,7 +94,6 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* ── Desktop nav links ── */}
           <nav className="hidden md:flex items-center gap-1">
             {links.map((l) => {
               const isActive = activeSection === l.href.replace("#", "");
@@ -111,7 +105,6 @@ export function Navbar() {
                   style={{ color: isActive ? "var(--color-ink)" : "var(--color-muted)" }}
                 >
                   {l.label}
-                  {/* Active dot */}
                   {isActive && (
                     <motion.span
                       layoutId="nav-active-dot"
@@ -125,9 +118,7 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* ── Right side ── */}
           <div className="flex items-center gap-3">
-            {/* Hire Me — desktop only */}
             <Link
               href="#contact"
               className="hidden md:inline-flex items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase rounded-full px-5 py-[0.5rem] border transition-all duration-300 hover:bg-[--color-ink] hover:text-white hover:border-[--color-ink]"
@@ -139,7 +130,6 @@ export function Navbar() {
               Hire Me
             </Link>
 
-            {/* Hamburger — mobile only */}
             <button
               onClick={() => setMenuOpen((v) => !v)}
               data-cursor-hover
@@ -173,11 +163,9 @@ export function Navbar() {
         </div>
       </motion.header>
 
-      {/* ── Mobile fullscreen menu ── */}
       <AnimatePresence>
         {menuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               key="backdrop"
               initial={{ opacity: 0 }}
@@ -189,7 +177,6 @@ export function Navbar() {
               onClick={() => setMenuOpen(false)}
             />
 
-            {/* Panel */}
             <motion.div
               key="panel"
               initial={{ x: "100%" }}
@@ -203,7 +190,6 @@ export function Navbar() {
                 borderLeft: "1px solid rgba(10,10,10,0.08)",
               }}
             >
-              {/* Panel header */}
               <div
                 className="flex items-center justify-between px-8 h-16 shrink-0"
                 style={{ borderBottom: "1px solid rgba(10,10,10,0.06)" }}
@@ -231,7 +217,6 @@ export function Navbar() {
                 </button>
               </div>
 
-              {/* Nav items */}
               <nav className="flex flex-col flex-1 px-8 py-10 gap-1">
                 {links.map((l, i) => {
                   const isActive = activeSection === l.href.replace("#", "");
@@ -275,7 +260,6 @@ export function Navbar() {
                 })}
               </nav>
 
-              {/* Panel footer */}
               <div
                 className="px-8 py-8 shrink-0"
                 style={{ borderTop: "1px solid rgba(10,10,10,0.06)" }}

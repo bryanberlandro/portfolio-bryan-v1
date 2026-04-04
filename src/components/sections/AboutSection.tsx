@@ -17,7 +17,6 @@ export function AboutSection() {
     offset: ["start end", "end start"],
   });
 
-  // Subtle parallax on portrait
   const portraitY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
@@ -27,7 +26,6 @@ export function AboutSection() {
       className="px-10 py-28 overflow-hidden"
       style={{ background: "var(--color-surface)" }}
     >
-      {/* ── Row 1: Label + availability ── */}
       <div className="flex items-center justify-between mb-16 flex-wrap gap-4">
         <Reveal>
           <SectionLabel>About Me</SectionLabel>
@@ -57,21 +55,17 @@ export function AboutSection() {
         </Reveal>
       </div>
 
-      {/* ── Row 2: The main horizontal stack ── */}
       <div className="flex flex-col lg:flex-row items-stretch gap-[1.5px]" style={{ background: "rgba(10,10,10,0.08)" }}>
 
-        {/* ── Col A: Name + bio (left) ── */}
         <Reveal delay={0.15} className="flex-1">
           <div
             className="flex flex-col justify-between h-full p-10 gap-10"
             style={{ background: "var(--color-paper)" }}
           >
-            {/* Role badge */}
             <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase" style={{ color: "var(--color-muted)" }}>
               Designer &amp; Developer · Depok, ID
             </p>
 
-            {/* Name — medium size, not overwhelming */}
             <div>
               <h2
                 className="font-display leading-[0.9] tracking-tight"
@@ -84,7 +78,6 @@ export function AboutSection() {
                 Godlive
               </h2>
 
-              {/* Thin divider */}
               <div className="flex items-center gap-4 mt-6">
                 <span className="block h-px flex-1" style={{ background: "rgba(10,10,10,0.1)" }} />
                 <span className="font-mono text-[0.55rem] tracking-[0.18em] uppercase" style={{ color: "var(--color-muted)" }}>
@@ -93,7 +86,6 @@ export function AboutSection() {
               </div>
             </div>
 
-            {/* Bio */}
             <p className="text-[0.92rem] leading-[1.85]" style={{ color: "var(--color-muted)" }}>
               Passionate about creating digital experiences that stand out — where{" "}
               <strong className="font-medium" style={{ color: "var(--color-ink)" }}>
@@ -115,7 +107,7 @@ export function AboutSection() {
                 </svg>
               </Link>
               
-              <a  href="/cv-bryan-sibuea.pdf"
+              <a  href="/bryan-berlandro-cv.pdf"
                 download
                 className="inline-flex items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase rounded-full px-5 py-[0.55rem] border transition-all duration-300 hover:bg-[--color-ink] hover:text-white hover:border-[--color-ink]"
                 style={{ borderColor: "rgba(10,10,10,0.15)", color: "var(--color-ink)" }}
@@ -129,7 +121,6 @@ export function AboutSection() {
           </div>
         </Reveal>
 
-        {/* ── Col B: Portrait — the wow factor ── */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -147,7 +138,7 @@ export function AboutSection() {
             className="absolute inset-0 scale-110"
           >
             <Image
-              src="/images/potrait2.jpeg"
+              src="/images/potrait3.jpeg"
               alt="Bryan Berlandro Godlive Sibuea"
               fill
               className="object-cover object-top grayscale"
@@ -155,13 +146,11 @@ export function AboutSection() {
             />
           </motion.div>
 
-          {/* Overlay gradient bottom */}
           <div
             className="absolute inset-x-0 bottom-0 h-32 z-10"
             style={{ background: "linear-gradient(to top, #0A0A0A, transparent)" }}
           />
 
-          {/* Name overlay on photo */}
           <div className="absolute bottom-6 left-6 z-20">
             <p
               className="font-display text-white leading-none tracking-wide"
@@ -172,7 +161,6 @@ export function AboutSection() {
           </div>
         </motion.div>
 
-        {/* ── Col C: Stats stacked vertically (right) ── */}
         <Reveal delay={0.3} className="shrink-0">
           <div
             className="flex flex-row lg:flex-col h-full gap-[1.5px]"
@@ -198,7 +186,6 @@ export function AboutSection() {
                   >
                     {s.label}
                   </p>
-                  {/* Progress bar — visual flair */}
                   <div
                     className="mt-3 h-px w-full overflow-hidden"
                     style={{ background: "rgba(10,10,10,0.08)" }}
@@ -220,14 +207,13 @@ export function AboutSection() {
 
       </div>
 
-      {/* ── Row 3: Horizontal marquee-style info strip ── */}
       <Reveal delay={0.4}>
         <div
           className="mt-[1.5px] flex items-center justify-between px-8 py-5 flex-wrap gap-4"
           style={{ background: "var(--color-paper)" }}
         >
           {[
-            { label: "Based in",     value: "Jakarta, Indonesia" },
+            { label: "Based in",     value: "Depok, Indonesia" },
             { label: "Available",    value: "Full-time & Freelance" },
             { label: "Speaks",       value: "Indonesian, English" },
             { label: "Response",     value: "Within 24 hours" },

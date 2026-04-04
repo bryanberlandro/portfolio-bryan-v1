@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { personal, skills } from "@/data/portfolio";
+import { ArrowDown } from "lucide-react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -21,7 +22,6 @@ export function HeroSection() {
       id="hero"
       className="relative min-h-screen bg-paper grid grid-cols-2 max-md:grid-cols-1 px-10 overflow-hidden"
     >
-      {/* Background index number */}
       <span
         aria-hidden
         className="pointer-events-none absolute top-1/2 right-10 -translate-y-1/2 font-display select-none z-0 leading-none tracking-tighter"
@@ -44,7 +44,6 @@ export function HeroSection() {
         BRYAN BERLANDRO
       </span>
 
-      {/* ── Left ── */}
       <div className="relative z-10 flex flex-col justify-end pb-20 pt-20">
         <div className="w-32 z-10 h-full absolute left-0 top-0 bg-linear-to-r from-paper/50 via-transparent"></div>
         <div className="w-32 z-20 h-full absolute right-0 top-0 bg-linear-to-l from-paper/50 via-transparent"></div>
@@ -79,28 +78,17 @@ export function HeroSection() {
           <Link
             href="#about"
             aria-label="Scroll down"
-            className="group w-[52px] h-[52px] border border-[--color-ink] rounded-full flex items-center justify-center hover:bg-[--color-ink] transition-all duration-300"
+            className="group w-[52px] h-[52px] border border-ink rounded-full flex items-center justify-center hover:bg-ink transition-all duration-300"
           >
-            <svg
-              className="w-5 h-5 stroke-[--color-ink] group-hover:stroke-white transition-colors"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 5v14M5 12l7 7 7-7" />
-            </svg>
+            <ArrowDown />
           </Link>
-          <span className="font-mono text-[0.6rem] tracking-[0.18em] uppercase text-[--color-muted]">
+          <span className="font-mono text-[0.6rem] tracking-[0.18em] uppercase text-muted">
             Scroll to explore
           </span>
         </motion.div>
       </div>
 
-      {/* ── Right ── */}
       <div className="relative z-10 flex md:flex-col justify-end items-end">
-        {/* Portrait */}
         <motion.div
           initial={{ opacity: 0, y: 48 }}
           animate={{ opacity: 1, y: 0 }}
@@ -118,7 +106,6 @@ export function HeroSection() {
           />
         </motion.div>
 
-        {/* Skill list */}
         <motion.div
           initial={{ opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
