@@ -25,9 +25,9 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio — Designer & Developer",
+  title: "Portfolio - Designer & Developer",
   description:
-    "Premium personal portfolio — UI/UX, Web Design, Development & Brand Identity.",
+    "Premium personal portfolio - UI/UX, Web Design, Development & Brand Identity.",
 };
 
 export default function RootLayout({
