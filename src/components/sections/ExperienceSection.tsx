@@ -1,16 +1,14 @@
-"use client";
-
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { experiences } from "@/data/portfolio";
 
 export function ExperienceSection() {
   return (
-    <section id="experience" className="px-10 py-28" style={{ background: "var(--color-paper)" }}>
+    <section id="experience" className="px-6 md:px-10 py-20 md:py-28" style={{ background: "var(--color-paper)" }}>
       <Reveal><SectionLabel>Experience</SectionLabel></Reveal>
       <Reveal delay={0.1}>
-        <h2 className="font-display leading-[0.9] tracking-tight" style={{ fontSize: "clamp(3rem,6vw,6.5rem)" }}>
-          WORK<br />HISTORY
+        <h2 className="font-display leading-[0.9]" style={{ fontSize: "clamp(2.5rem,6.2vw,5.75rem)" }}>
+          Work<br />history
         </h2>
       </Reveal>
 
@@ -18,7 +16,7 @@ export function ExperienceSection() {
         {experiences.map((exp, i) => (
           <Reveal key={exp.company} delay={0.1 + i * 0.1}>
             <div
-              className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-0 group"
+              className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-0 group"
               style={{ background: "var(--color-surface)" }}
             >
               <div
@@ -26,21 +24,21 @@ export function ExperienceSection() {
                 style={{ borderColor: "rgba(10,10,10,0.08)" }}
               >
                 <div>
-                  <p className="font-mono text-[0.58rem] tracking-[0.18em] uppercase mb-2" style={{ color: "var(--color-muted)" }}>
+                  <p className="font-mono text-[0.75rem] tracking-[0.01em] mb-2" style={{ color: "var(--color-muted)" }}>
                     {exp.period}
                   </p>
-                  <p className="font-display text-[1.6rem] tracking-wide leading-none" style={{ color: "var(--color-ink)" }}>
+                  <h3 className="font-display text-[1.35rem] leading-[1.1]" style={{ color: "var(--color-ink)" }}>
                     {exp.company}
-                  </p>
+                  </h3>
                 </div>
-                <p className="font-mono text-[0.58rem] tracking-[0.14em] uppercase mt-6" style={{ color: "var(--color-muted)" }}>
+                <p className="font-mono text-[0.75rem] tracking-[0.01em] mt-6" style={{ color: "var(--color-muted)" }}>
                   {exp.location}
                 </p>
               </div>
 
               <div className="px-8 py-10">
                 <p
-                  className="font-mono text-[0.6rem] tracking-[0.14em] uppercase mb-4"
+                  className="font-mono text-[0.78rem] tracking-[0.01em] mb-4"
                   style={{ color: "var(--color-ink)" }}
                 >
                   {exp.role}

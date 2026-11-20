@@ -3,15 +3,15 @@
 @theme {
   --color-ink: #0A0A0A;
   --color-paper: #FFFFFF;
-  --color-muted: #A3A3A3;
+  --color-muted: #6B6B6B; /* 5.3:1 on paper, 4.9:1 on surface (WCAG AA for small text) */
   --color-surface: #F5F5F5;
   --color-surface-2: #EFEFEF;
   --color-accent: #E8E0D5;
   --color-accent-2: #D4C5B0;
 
-  --font-display: "Bebas Neue", sans-serif;
-  --font-body: "DM Sans", sans-serif;
-  --font-mono: "Space Mono", monospace;
+  --font-display: var(--font-space), "Helvetica Neue", Arial, sans-serif;
+  --font-body: var(--font-space), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-space), "Helvetica Neue", Arial, sans-serif; /* labels reuse the same family */
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
@@ -43,30 +43,59 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   overflow-x: hidden;
+}
+
+/* Native cursor stays unless the custom cursor is actually active (fine pointer, no reduced motion). */
+html.has-cursor body,
+html.has-cursor a,
+html.has-cursor button,
+html.has-cursor [role="button"] {
   cursor: none;
 }
+/* The image viewer lives in the browser top layer, above the custom cursor, so keep the native cursor there. */
+html.has-cursor dialog.lightbox,
+html.has-cursor dialog.lightbox * { cursor: auto; }
+html.has-cursor dialog.lightbox button { cursor: pointer; }
+
+/* Visible keyboard focus everywhere, inheriting the element colour so it works on light and dark. */
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 10000;
+  padding: 0.6rem 1rem;
+  background: var(--color-ink);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+    border-radius: 9999px;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
 
 /* ─── Typography utilities ─── */
-.font-display   { font-family: var(--font-display); }
+/* One family, three weights: display 700, labels 500, body 400 (light 300 for contrast in headlines). */
+.font-display   { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.035em; }
 .font-body      { font-family: var(--font-body); }
-.font-mono      { font-family: var(--font-mono); }
+.font-mono      { font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
 
-.text-outline {
-  -webkit-text-stroke: 2px var(--color-ink);
-  color: transparent;
-}
-
-.text-outline-white {
-  -webkit-text-stroke: 2px rgba(255,255,255,0.55);
-  color: transparent;
-}
-
-.text-outline-white-solid {
-  -webkit-text-stroke: 2px #fff;
-  color: transparent;
-}
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
 
 /* ─── Cursor ─── */
+.cursor-dot,
+.cursor-ring { display: none; left: 0; top: 0; }
+html.has-cursor .cursor-dot,
+html.has-cursor .cursor-ring { display: block; }
+html.cursor-hidden .cursor-dot,
+html.cursor-hidden .cursor-ring { opacity: 0; }
+
 .cursor-dot {
   position: fixed;
   width: 10px;
@@ -75,9 +104,9 @@ body {
   border-radius: 9999px;
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
+  transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
   transition: width .3s var(--ease-out-expo), height .3s var(--ease-out-expo);
-  will-change: left, top;
+  will-change: transform;
 }
 .cursor-ring {
   position: fixed;
@@ -87,10 +116,10 @@ body {
   border-radius: 9999px;
   pointer-events: none;
   z-index: 9998;
-  transform: translate(-50%, -50%);
+  transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
   opacity: 0.4;
   transition: width .35s var(--ease-out-expo), height .35s var(--ease-out-expo), opacity .35s;
-  will-change: left, top;
+  will-change: transform;
 }
 .cursor-dot.is-hovering   { width: 16px; height: 16px; }
 .cursor-ring.is-hovering  { width: 66px; height: 66px; opacity: 0.18; }
@@ -128,8 +157,7 @@ body {
   font-family: var(--font-mono);
   font-size: 0.6rem;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: 1px solid rgba(10,10,10,0.12);
+    border: 1px solid rgba(10,10,10,0.12);
   padding: 0.35rem 0.85rem;
   border-radius: 9999px;
   color: var(--color-muted);
@@ -148,14 +176,251 @@ body {
 }
 
 /* ─── Process number ─── */
-.process-num {
-  font-family: var(--font-display);
-  font-size: 5rem;
-  line-height: 1;
-  color: rgba(10,10,10,0.06);
-  position: absolute;
-  top: -1rem;
-  right: 1.5rem;
-  pointer-events: none;
-  user-select: none;
+
+
+/* ─── Entrance animations (CSS only, transform + opacity) ─── */
+@keyframes rise {
+  /* Start at 0.01, not 0: Chrome ignores fully transparent elements for LCP, so a true 0 delays it. */
+  from { opacity: 0.01; transform: translate3d(var(--rise-x, 0px), var(--rise-y, 32px), 0); }
+  to   { opacity: 1; transform: none; }
 }
+.rise {
+  animation: rise var(--rise-d, 0.9s) var(--ease-out-expo) var(--rise-delay, 0s) both;
+}
+
+/* Scroll reveal: hidden only when scripting is available, so content is never lost without JS. */
+.reveal {
+  transition:
+    opacity var(--reveal-d, 0.9s) var(--ease-out-expo) var(--reveal-delay, 0s),
+    transform var(--reveal-d, 0.9s) var(--ease-out-expo) var(--reveal-delay, 0s);
+}
+@media (scripting: enabled) {
+  .reveal:not(.is-in) {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 32px), 0);
+  }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rise { animation: none; }
+  /* A progress indicator is state, not decoration: keep it working. */
+  .scroll-progress { animation-duration: auto !important; }
+  .marquee-track { animation: none; }
+  .reveal:not(.is-in) { opacity: 1; transform: none; }
+  .reveal { transition: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ─── Disclosure (accordion panels, CSS only) ─── */
+.disclosure {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.55s var(--ease-out-expo), opacity 0.4s var(--ease-out-expo);
+}
+.disclosure[data-open="true"] { grid-template-rows: 1fr; opacity: 1; }
+.disclosure-inner { overflow: hidden; min-height: 0; }
+
+.project-toggle {
+  border-color: rgba(10, 10, 10, 0.18);
+  transition: transform 0.35s var(--ease-out-expo), background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.project-row[aria-expanded="true"] .project-toggle { transform: rotate(45deg); }
+.project-row:hover .project-toggle { background: var(--color-ink); color: #fff; border-color: var(--color-ink); }
+
+/* ─── Services rows ─── */
+.svc-bg {
+  position: absolute;
+  inset: 0 -1.5rem;
+  background: var(--color-ink);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out-expo);
+}
+.svc[data-active="true"] .svc-bg { opacity: 1; }
+.svc-num { color: var(--color-muted); }
+.svc-name { color: var(--color-ink); transition: color 0.3s; }
+.svc-desc { color: rgba(255, 255, 255, 0.6); }
+.svc-arrow { border-color: rgba(10, 10, 10, 0.18); transition: border-color 0.3s, transform 0.3s var(--ease-out-expo); }
+.svc-btn:hover .svc-arrow { transform: translateX(2px); }
+.svc[data-active="true"] .svc-num { color: rgba(255, 255, 255, 0.6); }
+.svc[data-active="true"] .svc-name { color: #fff; }
+.svc[data-active="true"] .svc-arrow { border-color: rgba(255, 255, 255, 0.3); color: #fff; }
+
+/* ─── Navigation active dot ─── */
+.nav-dot {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--color-ink);
+  transform: translateX(-50%) scale(0);
+  opacity: 0;
+  transition: transform 0.35s var(--ease-out-expo), opacity 0.25s;
+}
+.nav-dot[data-active="true"] { transform: translateX(-50%) scale(1); opacity: 1; }
+
+/* ─── Image viewer (native dialog) ─── */
+.lightbox-trigger { cursor: zoom-in; background: transparent; }
+.lightbox-hint {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+    transition: background-color 0.3s, color 0.3s;
+}
+.lightbox-trigger:hover .lightbox-hint { background: var(--color-ink); color: #fff; }
+
+dialog.lightbox {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: clamp(1rem, 4vw, 3rem);
+  border: 0;
+  background: rgba(10, 10, 10, 0.98);
+  color: #fff;
+}
+dialog.lightbox[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lightbox-in 0.25s var(--ease-out-expo);
+}
+dialog.lightbox::backdrop { background: transparent; }
+@keyframes lightbox-in { from { opacity: 0; } to { opacity: 1; } }
+.lightbox-scroll {
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+}
+.lightbox-frame {
+  position: relative;
+  width: min(100vw - 2 * clamp(1rem, 4vw, 3rem), calc((100dvh - 8rem) * 1.7778));
+  aspect-ratio: 16 / 9;
+}
+/* Narrow screens: show the screenshot larger and let it pan horizontally instead of shrinking it. */
+@media (max-width: 640px) {
+  .lightbox-frame { width: 900px; }
+}
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: transparent;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+    transition: background-color 0.3s, color 0.3s;
+}
+.lightbox-close:hover { background: #fff; color: var(--color-ink); }
+body:has(dialog.lightbox[open]) { overflow: hidden; }
+
+
+/* ─── Growth & Capabilities ─── */
+.growth-tab { color: rgba(255, 255, 255, 0.6); transition: color 0.3s var(--ease-out-expo); }
+.growth-tab[data-selected="true"] { color: #fff; }
+.growth-tab:hover { color: #fff; }
+.growth-skill { color: #fff; }
+.growth-plus { border-color: rgba(255, 255, 255, 0.3); transition: transform 0.35s var(--ease-out-expo), background-color 0.3s, color 0.3s; }
+.growth-skill:hover .growth-plus { background: #fff; color: var(--color-ink); }
+.growth-skill[aria-expanded="true"] .growth-plus { transform: rotate(45deg); }
+
+.meter { display: inline-flex; gap: 3px; }
+.meter-seg {
+  width: 14px;
+  height: 6px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.16);
+  transition: background-color 0.6s var(--ease-out-expo) calc(var(--i, 0) * 80ms);
+}
+.meter-seg[data-on="true"] { background: #fff; }
+@starting-style {
+  .meter-seg[data-on="true"] { background: rgba(255, 255, 255, 0.16); }
+}
+
+.growth-chip {
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+.growth-chip:hover { background: #fff; color: var(--color-ink); }
+.growth-link { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(255, 255, 255, 0.4); }
+.growth-link:hover { text-decoration-color: #fff; }
+
+.timeline-item { transition: opacity 0.35s var(--ease-out-expo); padding-left: 1rem; border-left: 2px solid rgba(255, 255, 255, 0.14); }
+.timeline-item[data-dim="true"] { opacity: 0.35; }
+.timeline-item[data-hit="true"] { border-left-color: #fff; }
+.timeline-item a:hover span:nth-child(2) { text-decoration: underline; text-underline-offset: 4px; }
+
+
+/* ─── Cursor label ("Open", "Close", "View") ─── */
+.cursor-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cursor-ring.has-label { width: 84px; height: 84px; opacity: 1; background: var(--color-ink); border-color: var(--color-ink); }
+.cursor-ring.has-label .cursor-label { opacity: 1; }
+.cursor-ring.is-dark.has-label { background: #fff; border-color: #fff; }
+.cursor-ring.is-dark.has-label .cursor-label { color: var(--color-ink); }
+.cursor-dot.has-label { opacity: 0; }
+
+/* ─── Magnetic buttons ─── */
+.magnetic { display: inline-block; transition: transform 0.35s var(--ease-out-expo); will-change: transform; }
+
+/* ─── Scroll progress (CSS scroll-driven, no JavaScript) ─── */
+.scroll-progress { display: none; }
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 60;
+    background: var(--color-ink);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    animation: scroll-progress linear both;
+    animation-timeline: scroll(root block);
+    pointer-events: none;
+  }
+}
+@keyframes scroll-progress { to { transform: scaleX(1); } }

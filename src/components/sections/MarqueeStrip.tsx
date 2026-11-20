@@ -1,8 +1,6 @@
 const items = [
-  "UI / UX Design","Web Development","Landing Pages","Figma Expert",
-  "Webflow","Brand Identity","Motion Design","Mobile App",
-  "UI / UX Design","Web Development","Landing Pages","Figma Expert",
-  "Webflow","Brand Identity","Motion Design","Mobile App",
+  "UI/UX Design","Web Design","Frontend Development","Fullstack Development","Responsive Web Development",
+  "UI/UX Design","Web Design","Frontend Development","Fullstack Development","Responsive Web Development",
 ];
 
 export function MarqueeStrip() {
@@ -15,8 +13,8 @@ export function MarqueeStrip() {
         {items.map((item, i) => (
           <span key={i} className="inline-flex items-center">
             <span
-              className="font-display tracking-[0.18em] mx-10 opacity-70"
-              style={{ fontSize: "1rem", color: "#fff" }}
+              className="font-display tracking-[0.04em] mx-10 opacity-70"
+              style={{ fontSize: "0.95rem", color: "#fff" }}
             >
               {item}
             </span>

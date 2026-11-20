@@ -1,67 +1,103 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
+const INTERACTIVE = "a,button,[data-cursor-hover],[role='button'],summary,input,textarea,select,label";
+
+/**
+ * Desktop-only enhancement. Enabled only for (hover: hover) and (pointer: fine) and when the user
+ * has not asked for reduced motion. Otherwise the native cursor is left untouched.
+ * No React state: classes and transforms are updated directly, and the follow loop only runs
+ * while the ring is catching up with the pointer.
+ */
 export function Cursor() {
-  const dotRef  = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const [hovering, setHovering] = useState(false);
-  const [dark, setDark] = useState(false);
-  const pos      = useRef({ x: -100, y: -100 });
-  const follower = useRef({ x: -100, y: -100 });
-  const rafId    = useRef<number>(0);
+  const labelRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      pos.current = { x: e.clientX, y: e.clientY };
-      if (dotRef.current) {
-        dotRef.current.style.left = `${e.clientX}px`;
-        dotRef.current.style.top  = `${e.clientY}px`;
-      }
-      const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
-      setDark(!!el?.closest("[data-cursor-dark]"));
-    };
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    const label = labelRef.current;
+    if (!dot || !ring || !label) return;
 
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const root = document.documentElement;
+    let raf = 0;
+    let tx = -100, ty = -100, rx = -100, ry = -100;
+    let enabled = false;
+
+    const place = (el: HTMLElement, x: number, y: number) => {
+      el.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
+    };
     const loop = () => {
-      follower.current.x += (pos.current.x - follower.current.x) * 0.1;
-      follower.current.y += (pos.current.y - follower.current.y) * 0.1;
-      if (ringRef.current) {
-        ringRef.current.style.left = `${follower.current.x}px`;
-        ringRef.current.style.top  = `${follower.current.y}px`;
+      rx += (tx - rx) * 0.1;
+      ry += (ty - ry) * 0.1;
+      place(ring, rx, ry);
+      raf = Math.abs(tx - rx) > 0.1 || Math.abs(ty - ry) > 0.1 ? requestAnimationFrame(loop) : 0;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      tx = e.clientX;
+      ty = e.clientY;
+      place(dot, tx, ty);
+      if (!raf) raf = requestAnimationFrame(loop);
+    };
+    const onOver = (e: PointerEvent) => {
+      const t = e.target as Element | null;
+      if (!t || !t.closest) return;
+      const hover = !!t.closest(INTERACTIVE);
+      const dark = !!t.closest("[data-cursor-dark]");
+      const text = t.closest("[data-cursor-label]")?.getAttribute("data-cursor-label") ?? "";
+      label.textContent = text;
+      for (const el of [dot, ring]) {
+        el.classList.toggle("is-hovering", hover);
+        el.classList.toggle("is-dark", dark);
+        el.classList.toggle("has-label", text !== "");
       }
-      rafId.current = requestAnimationFrame(loop);
     };
+    const onLeave = () => root.classList.add("cursor-hidden");
+    const onEnter = () => root.classList.remove("cursor-hidden");
 
-    window.addEventListener("mousemove", onMove);
-    rafId.current = requestAnimationFrame(loop);
-
-    const on  = () => setHovering(true);
-    const off = () => setHovering(false);
-
-    const update = () => {
-      document.querySelectorAll("a,button,[data-cursor-hover]").forEach((el) => {
-        el.addEventListener("mouseenter", on);
-        el.addEventListener("mouseleave", off);
-      });
+    const enable = () => {
+      if (enabled) return;
+      enabled = true;
+      root.classList.add("has-cursor");
+      window.addEventListener("pointermove", onMove, { passive: true });
+      document.addEventListener("pointerover", onOver, { passive: true });
+      root.addEventListener("mouseleave", onLeave);
+      root.addEventListener("mouseenter", onEnter);
     };
-    update();
-    const observer = new MutationObserver(update);
-    observer.observe(document.body, { childList: true, subtree: true });
+    const disable = () => {
+      if (!enabled) return;
+      enabled = false;
+      root.classList.remove("has-cursor", "cursor-hidden");
+      window.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerover", onOver);
+      root.removeEventListener("mouseleave", onLeave);
+      root.removeEventListener("mouseenter", onEnter);
+      cancelAnimationFrame(raf);
+      raf = 0;
+    };
+    const sync = () => (fine.matches && !reduced.matches ? enable() : disable());
 
+    sync();
+    fine.addEventListener("change", sync);
+    reduced.addEventListener("change", sync);
     return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(rafId.current);
-      observer.disconnect();
+      fine.removeEventListener("change", sync);
+      reduced.removeEventListener("change", sync);
+      disable();
     };
   }, []);
 
-  const dotClass  = `cursor-dot  ${hovering ? "is-hovering" : ""} ${dark ? "is-dark" : ""}`;
-  const ringClass = `cursor-ring ${hovering ? "is-hovering" : ""} ${dark ? "is-dark" : ""}`;
-
   return (
     <>
-      <div ref={dotRef}  className={dotClass}  />
-      <div ref={ringRef} className={ringClass} />
+      <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
+      <div ref={ringRef} className="cursor-ring" aria-hidden="true">
+        <span ref={labelRef} className="cursor-label" />
+      </div>
     </>
   );
 }

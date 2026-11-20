@@ -1,26 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { toolCategories } from "@/data/portfolio";
 
 const ease = [0.16, 1, 0.3, 1] as const;
-
-const sizeMap: Record<string, string> = {
-  Design:      "text-[1.05rem]",
-  Development: "text-[1.2rem]",
-  Platform:    "text-[0.95rem]",
-  Other:       "text-[0.88rem]",
-};
-
-const hoverBg: Record<string, string> = {
-  Design:      "hover:bg-[#0A0A0A]",
-  Development: "hover:bg-[#0A0A0A]",
-  Platform:    "hover:bg-[#0A0A0A]",
-  Other:       "hover:bg-[#0A0A0A]",
-};
 
 type Tool = { name: string; category: string };
 
@@ -41,25 +27,25 @@ export function SkillsSection() {
   return (
     <section
       id="skills"
-      className="px-10 py-28"
+      className="px-6 md:px-10 py-20 md:py-28"
       style={{ background: "var(--color-paper)" }}
     >
       <Reveal>
-        <SectionLabel>Skills &amp; Tools</SectionLabel>
+        <SectionLabel>Stack &amp; Skills</SectionLabel>
       </Reveal>
       <Reveal delay={0.1}>
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <h2
-            className="font-display leading-[0.9] tracking-tight"
-            style={{ fontSize: "clamp(3rem,6vw,6.5rem)" }}
+            className="font-display leading-[0.9]"
+            style={{ fontSize: "clamp(2.5rem,6.2vw,5.75rem)" }}
           >
-            WHAT I<br />WORK WITH
+            What I<br />work with
           </h2>
           <p
             className="text-[0.85rem] leading-relaxed max-w-xs pb-1"
             style={{ color: "var(--color-muted)" }}
           >
-            {visible.length} tools across design, development, platform &amp; workflow.
+            {visible.length} items across design, development, and skills.
           </p>
         </div>
       </Reveal>
@@ -73,7 +59,7 @@ export function SkillsSection() {
                 key={cat}
                 onClick={() => setActiveFilter(cat)}
                 data-cursor-hover
-                className="font-mono text-[0.6rem] tracking-[0.14em] uppercase rounded-full px-4 py-[0.45rem] border transition-all duration-300"
+                className="font-mono text-[0.78rem] tracking-[0.01em] rounded-full px-4 py-[0.45rem] border transition-all duration-300"
                 style={{
                   background:     isActive ? "var(--color-ink)" : "transparent",
                   color:          isActive ? "#fff" : "var(--color-muted)",
@@ -82,7 +68,7 @@ export function SkillsSection() {
               >
                 {cat}
                 {cat !== "All" && (
-                  <span className="ml-[6px] opacity-50">
+                  <span className="ml-[6px] opacity-50" aria-hidden>
                     {toolCategories.find((c) => c.category === cat)?.tools.length}
                   </span>
                 )}
@@ -102,10 +88,9 @@ export function SkillsSection() {
             {visible.map((tool, i) => {
               const isHovered    = hovered === tool.name;
               const isNeighbour  = hovered !== null && !isHovered;
-              const size         = sizeMap[tool.category];
-
+              
               return (
-                <motion.span
+                <m.span
                   key={`${tool.category}-${tool.name}`}
                   initial={{ opacity: 0, scale: 0.88 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -116,11 +101,10 @@ export function SkillsSection() {
                   data-cursor-hover
                   className={`
                     inline-flex items-center gap-2
-                    font-mono tracking-[0.1em] uppercase
+                    font-mono tracking-[0.01em] 
                     border rounded-full px-5 py-[0.55rem]
-                    transition-all duration-300 cursor-none
-                    ${size}
-                    ${hoverBg[tool.category]}
+                    transition-all duration-300
+                    text-[0.78rem] hover:bg-[#0A0A0A]
                   `}
                   style={{
                     borderColor: isHovered
@@ -143,7 +127,7 @@ export function SkillsSection() {
                     }}
                   />
                   {tool.name}
-                </motion.span>
+                </m.span>
               );
             })}
           </div>
@@ -167,7 +151,7 @@ export function SkillsSection() {
                   style={{ background: "var(--color-ink)" }}
                 />
                 <span
-                  className="font-mono text-[0.56rem] tracking-[0.16em] uppercase"
+                  className="font-mono text-[0.75rem] tracking-[0.01em]"
                   style={{ color: "var(--color-muted)" }}
                 >
                   {cat.category} ({cat.tools.length})

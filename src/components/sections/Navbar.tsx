@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { Magnetic } from "@/components/ui/Magnetic";
 
 const links = [
   { label: "About",       href: "#about" },
@@ -12,6 +13,19 @@ const links = [
   { label: "Contact",     href: "#contact" },
 ];
 
+// Page sections in DOM order, and the nav link each one belongs to.
+// Sections without their own nav link (skills, progress) stay under the previous one.
+const SECTION_IDS = ["hero", "about", "skills", "projects", "experience", "progress", "services", "contact"];
+const SECTION_TO_NAV: Record<string, string> = {
+  about: "about",
+  skills: "about",
+  projects: "projects",
+  experience: "experience",
+  progress: "experience",
+  services: "services",
+  contact: "contact",
+};
+
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Navbar() {
@@ -19,29 +33,42 @@ export function Navbar() {
   const [menuOpen, setMenuOpen]     = useState(false);
   const [activeSection, setActive]  = useState("");
 
+  // One rAF-throttled scroll handler. The active section is the last one whose top has passed
+  // a probe line at 40% of the viewport, so tall sections work at any screen size (no threshold).
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    let raf = 0;
+    const compute = () => {
+      raf = 0;
+      setScrolled(window.scrollY > 40);
+      const probe = window.innerHeight * 0.4;
+      let current = "";
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= probe) current = id;
+      }
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      if (atBottom) current = "contact";
+      setActive(SECTION_TO_NAV[current] ?? "");
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(compute);
+    };
+    compute();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
   useEffect(() => {
-    const ids = links.map((l) => l.href.replace("#", ""));
-    const observers: IntersectionObserver[] = [];
-
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActive(id); },
-        { threshold: 0.35 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-
-    return () => observers.forEach((o) => o.disconnect());
-  }, []);
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -57,7 +84,7 @@ export function Navbar() {
 
   return (
     <>
-      <motion.header
+      <m.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease }}
@@ -68,7 +95,7 @@ export function Navbar() {
           backdropFilter: scrolled ? "blur(8px)" : "none",
         }}
       >
-        <div className="flex items-center justify-between px-10 h-16">
+        <div className="flex items-center justify-between px-6 md:px-10 h-16">
 
           <Link
             href="/"
@@ -87,7 +114,7 @@ export function Navbar() {
               </span>
             </div>
             <span
-              className="font-mono text-[0.68rem] tracking-[0.18em] uppercase hidden sm:block"
+              className="font-mono text-[0.82rem] tracking-[0.01em] hidden sm:block"
               style={{ color: "var(--color-ink)" }}
             >
               Bryan Berlandro
@@ -101,27 +128,22 @@ export function Navbar() {
                 <Link
                   key={l.href}
                   href={l.href}
-                  className="relative px-4 py-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase transition-colors duration-200"
+                  aria-current={isActive ? "location" : undefined}
+                  className="relative px-4 py-2 font-mono text-[0.8rem] tracking-[0.01em] transition-colors duration-200"
                   style={{ color: isActive ? "var(--color-ink)" : "var(--color-muted)" }}
                 >
                   {l.label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-active-dot"
-                      className="absolute bottom-[4px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] rounded-full"
-                      style={{ background: "var(--color-ink)" }}
-                      transition={{ duration: 0.4, ease }}
-                    />
-                  )}
+                  <span aria-hidden="true" className="nav-dot" data-active={isActive} />
                 </Link>
               );
             })}
           </nav>
 
           <div className="flex items-center gap-3">
+            <Magnetic className="hidden md:inline-block">
             <Link
               href="#contact"
-              className="hidden md:inline-flex items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase rounded-full px-5 py-[0.5rem] border transition-all duration-300 hover:bg-[--color-ink] hover:text-white hover:border-[--color-ink]"
+              className="hidden md:inline-flex items-center gap-2 font-mono text-[0.8rem] tracking-[0.01em] rounded-full px-5 py-[0.5rem] border transition-all duration-300 hover:bg-[--color-ink] hover:text-white hover:border-[--color-ink]"
               style={{
                 borderColor: "rgba(10,10,10,0.2)",
                 color: "var(--color-ink)",
@@ -129,30 +151,33 @@ export function Navbar() {
             >
               Hire Me
             </Link>
+            </Magnetic>
 
             <button
               onClick={() => setMenuOpen((v) => !v)}
               data-cursor-hover
               aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
               className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-full border transition-colors duration-300"
               style={{
                 borderColor: menuOpen ? "var(--color-ink)" : "rgba(10,10,10,0.15)",
                 background: menuOpen ? "var(--color-ink)" : "transparent",
               }}
             >
-              <motion.span
+              <m.span
                 className="block h-[1.5px] w-4 origin-center"
                 style={{ background: menuOpen ? "#fff" : "var(--color-ink)" }}
                 animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 6.5 : 0 }}
                 transition={{ duration: 0.35, ease }}
               />
-              <motion.span
+              <m.span
                 className="block h-[1.5px] w-4"
                 style={{ background: menuOpen ? "#fff" : "var(--color-ink)" }}
                 animate={{ opacity: menuOpen ? 0 : 1, scaleX: menuOpen ? 0 : 1 }}
                 transition={{ duration: 0.25, ease }}
               />
-              <motion.span
+              <m.span
                 className="block h-[1.5px] w-4 origin-center"
                 style={{ background: menuOpen ? "#fff" : "var(--color-ink)" }}
                 animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -6.5 : 0 }}
@@ -161,12 +186,12 @@ export function Navbar() {
             </button>
           </div>
         </div>
-      </motion.header>
+      </m.header>
 
       <AnimatePresence>
         {menuOpen && (
           <>
-            <motion.div
+            <m.div
               key="backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -177,8 +202,9 @@ export function Navbar() {
               onClick={() => setMenuOpen(false)}
             />
 
-            <motion.div
+            <m.div
               key="panel"
+              id="mobile-menu"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -195,7 +221,7 @@ export function Navbar() {
                 style={{ borderBottom: "1px solid rgba(10,10,10,0.06)" }}
               >
                 <span
-                  className="font-mono text-[0.6rem] tracking-[0.18em] uppercase"
+                  className="font-mono text-[0.78rem] tracking-[0.01em]"
                   style={{ color: "var(--color-muted)" }}
                 >
                   Navigation
@@ -221,7 +247,7 @@ export function Navbar() {
                 {links.map((l, i) => {
                   const isActive = activeSection === l.href.replace("#", "");
                   return (
-                    <motion.button
+                    <m.button
                       key={l.href}
                       initial={{ opacity: 0, x: 24 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -233,19 +259,19 @@ export function Navbar() {
                     >
                       <div className="flex items-center gap-4">
                         <span
-                          className="font-mono text-[0.52rem] tracking-[0.14em]"
+                          className="font-mono text-[0.75rem] tracking-[0.01em]"
                           style={{ color: "var(--color-muted)" }}
                         >
                           0{i + 1}
                         </span>
                         <span
-                          className="font-display text-[2rem] tracking-wide leading-none transition-colors duration-200"
+                          className="font-display text-[2rem] leading-none transition-colors duration-200"
                           style={{ color: isActive ? "var(--color-ink)" : "rgba(10,10,10,0.35)" }}
                         >
                           {l.label}
                         </span>
                       </div>
-                      <motion.div
+                      <m.div
                         className="w-8 h-8 rounded-full border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                         style={{ borderColor: "rgba(10,10,10,0.12)" }}
                       >
@@ -254,8 +280,8 @@ export function Navbar() {
                           strokeLinecap="round" strokeLinejoin="round">
                           <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
-                      </motion.div>
-                    </motion.button>
+                      </m.div>
+                    </m.button>
                   );
                 })}
               </nav>
@@ -264,7 +290,7 @@ export function Navbar() {
                 className="px-8 py-8 shrink-0"
                 style={{ borderTop: "1px solid rgba(10,10,10,0.06)" }}
               >
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4, ease }}
@@ -272,7 +298,7 @@ export function Navbar() {
                   <Link
                     href="#contact"
                     onClick={() => setMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full font-mono text-[0.65rem] tracking-[0.14em] uppercase rounded-full py-4 transition-all duration-300 hover:opacity-80"
+                    className="flex items-center justify-center gap-2 w-full font-mono text-[0.8rem] tracking-[0.01em] rounded-full py-4 transition-all duration-300 hover:opacity-80"
                     style={{ background: "var(--color-ink)", color: "#fff" }}
                   >
                     Start a Project
@@ -283,14 +309,14 @@ export function Navbar() {
                     </svg>
                   </Link>
                   <p
-                    className="font-mono text-[0.55rem] tracking-[0.14em] uppercase text-center mt-4"
+                    className="font-mono text-[0.75rem] tracking-[0.01em] text-center mt-4"
                     style={{ color: "var(--color-muted)" }}
                   >
                     Bryan Berlandro · Jakarta, ID
                   </p>
-                </motion.div>
+                </m.div>
               </div>
-            </motion.div>
+            </m.div>
           </>
         )}
       </AnimatePresence>

@@ -1,37 +1,27 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef, type ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 interface RevealProps {
   children: ReactNode;
-  className?: string;
   delay?: number;
   y?: number;
   duration?: number;
-  once?: boolean;
+  className?: string;
 }
 
-export function Reveal({
-  children,
-  className,
-  delay = 0,
-  y = 36,
-  duration = 0.85,
-  once = true,
-}: RevealProps) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, margin: "-80px" });
-
+/**
+ * Server-rendered wrapper. The hidden/visible states are pure CSS (see .reveal in globals.css),
+ * and a single <RevealObserver /> adds `is-in` when the element scrolls into view.
+ * Content is fully visible when JavaScript is off or the user prefers reduced motion.
+ */
+export function Reveal({ children, delay = 0, y = 32, duration = 0.9, className = "" }: RevealProps) {
+  const style = {
+    "--reveal-y": `${y}px`,
+    "--reveal-d": `${duration}s`,
+    "--reveal-delay": `${delay}s`,
+  } as CSSProperties;
   return (
-    <motion.div
-      ref={ref}
-      className={className}
-      initial={{ opacity: 0, y }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
-      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
-    >
+    <div className={`reveal ${className}`.trim()} style={style}>
       {children}
-    </motion.div>
+    </div>
   );
 }

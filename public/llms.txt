@@ -1,0 +1,21 @@
+# Bryan Berlandro Godlive
+
+> Bryan Berlandro Godlive is a UI/UX Designer and Fullstack Developer based in Depok, Indonesia, with 3 years of experience. He designs in Figma and builds websites and web apps with HTML, CSS, JavaScript, React, Next.js, Node.js, and Express.js. Available for projects.
+
+This is a single-page portfolio. Everything below is on the homepage.
+
+## Pages
+- [Portfolio homepage](https://bryanberlandro.com/): About, skills, selected projects, experience, services, and contact.
+- [CV (PDF)](https://bryanberlandro.com/bryan-berlandro-cv.pdf): Curriculum vitae.
+
+## Selected projects
+- [Braka Nusa Core](https://brakanusacore.com): Digital agency website.
+- [Pandi Proteksi Marine Indonesia](https://pandiproteksi.com): Company profile website.
+- [Agent Z Creative](https://agentzcreative.com): Creative agency website.
+- [Curhatin Aja](https://curhatinaja.com): Anonymous sharing platform.
+- Transseaworthy: Company profile website (no public link yet). macwill4
+
+## Contact
+- Email: bryanberlandro@gmail.com
+
+

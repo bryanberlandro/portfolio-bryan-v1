@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { Magnetic } from "@/components/ui/Magnetic";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
-import { stats } from "@/data/portfolio";
+import { personal, stats } from "@/data/portfolio";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -17,13 +18,15 @@ export function AboutSection() {
     offset: ["start end", "end start"],
   });
 
-  const portraitY = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const reduceMotion = useReducedMotion();
+  const parallax = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const portraitY = reduceMotion ? 0 : parallax;
 
   return (
     <section
       id="about"
       ref={sectionRef}
-      className="px-10 py-28 overflow-hidden"
+      className="px-6 md:px-10 py-20 md:py-28 overflow-hidden"
       style={{ background: "var(--color-surface)" }}
     >
       <div className="flex items-center justify-between mb-16 flex-wrap gap-4">
@@ -48,7 +51,7 @@ export function AboutSection() {
                 style={{ background: "#22c55e" }}
               />
             </span>
-            <span className="font-mono text-[0.58rem] tracking-[0.16em] uppercase" style={{ color: "var(--color-ink)" }}>
+            <span className="font-mono text-[0.75rem] tracking-[0.01em]" style={{ color: "var(--color-ink)" }}>
               Available for projects
             </span>
           </div>
@@ -62,43 +65,47 @@ export function AboutSection() {
             className="flex flex-col justify-between h-full p-10 gap-10"
             style={{ background: "var(--color-paper)" }}
           >
-            <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase" style={{ color: "var(--color-muted)" }}>
-              Designer &amp; Developer · Depok, ID
+            <p className="font-mono text-[0.78rem] tracking-[0.01em]" style={{ color: "var(--color-muted)" }}>
+              UI/UX Designer &amp; Fullstack Developer · Depok, Indonesia
             </p>
 
             <div>
               <h2
-                className="font-display leading-[0.9] tracking-tight"
-                style={{ fontSize: "clamp(2.4rem,4.5vw,4.8rem)", color: "var(--color-ink)" }}
+                className="font-display leading-[0.95]"
+                style={{ fontSize: "clamp(2.4rem,4.6vw,4.6rem)", color: "var(--color-ink)" }}
               >
                 Bryan<br />
-                <span className="text-outline" style={{ fontSize: "clamp(2.4rem,4.5vw,4.8rem)" }}>
-                  Berlandro
-                </span><br />
-                Godlive
+                Berlandro<br />
+                <span style={{ fontWeight: 300 }}>Godlive</span>
               </h2>
 
               <div className="flex items-center gap-4 mt-6">
                 <span className="block h-px flex-1" style={{ background: "rgba(10,10,10,0.1)" }} />
-                <span className="font-mono text-[0.55rem] tracking-[0.18em] uppercase" style={{ color: "var(--color-muted)" }}>
-                  Est. 2020
+                <span className="font-mono text-[0.78rem] tracking-[0.01em]" style={{ color: "var(--color-muted)" }}>
+                  {personal.experience}
                 </span>
               </div>
             </div>
 
-            <p className="text-[0.92rem] leading-[1.85]" style={{ color: "var(--color-muted)" }}>
-              Passionate about creating digital experiences that stand out — where{" "}
-              <strong className="font-medium" style={{ color: "var(--color-ink)" }}>
-                aesthetics meet function
-              </strong>
-              . I design and build products that feel as good as they look.
-            </p>
+            <div className="flex flex-col gap-4">
+              {personal.bio.map((para, i) => (
+                <p
+                  key={i}
+                  className="text-[0.92rem] leading-[1.8]"
+                  style={{ color: i === 0 ? "var(--color-ink)" : "var(--color-muted)" }}
+                >
+                  {para}
+                </p>
+              ))}
+            </div>
 
             {/* CTAs */}
             <div className="flex items-center gap-3 flex-wrap">
+              <Magnetic>
               <Link
                 href="#contact"
-                className="inline-flex items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase rounded-full px-5 py-[0.55rem] transition-all duration-300 hover:opacity-75"
+                aria-label="Hire Bryan Berlandro, go to the contact section"
+                className="inline-flex items-center gap-2 font-mono text-[0.8rem] tracking-[0.01em] rounded-full px-5 py-[0.55rem] transition-all duration-300 hover:opacity-75"
                 style={{ background: "var(--color-ink)", color: "#fff" }}
               >
                 Hire Me
@@ -106,13 +113,14 @@ export function AboutSection() {
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
+              </Magnetic>
               
               <a  href="/bryan-berlandro-cv.pdf"
                 download
-                className="inline-flex items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase rounded-full px-5 py-[0.55rem] border transition-all duration-300 hover:bg-[--color-ink] hover:text-white hover:border-[--color-ink]"
+                className="inline-flex items-center gap-2 font-mono text-[0.8rem] tracking-[0.01em] rounded-full px-5 py-[0.55rem] border transition-all duration-300 hover:bg-[--color-ink] hover:text-white hover:border-[--color-ink]"
                 style={{ borderColor: "rgba(10,10,10,0.15)", color: "var(--color-ink)" }}
               >
-                Download CV
+                Download CV (PDF)
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 5v14M5 12l7 7 7-7" />
                 </svg>
@@ -121,7 +129,7 @@ export function AboutSection() {
           </div>
         </Reveal>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -133,18 +141,19 @@ export function AboutSection() {
             background: "#0A0A0A",
           }}
         >
-          <motion.div
+          <m.div
             style={{ y: portraitY }}
             className="absolute inset-0 scale-110"
           >
             <Image
-              src="/images/potrait3.jpeg"
-              alt="Bryan Berlandro Godlive Sibuea"
+              src="/images/bryan-berlandro-portrait-about.jpeg"
+              alt="Bryan Berlandro Godlive"
               fill
+              sizes="(min-width: 1024px) 400px, 100vw"
               className="object-cover object-top grayscale"
               style={{ filter: "grayscale(1) contrast(1.08)" }}
             />
-          </motion.div>
+          </m.div>
 
           <div
             className="absolute inset-x-0 bottom-0 h-32 z-10"
@@ -153,25 +162,24 @@ export function AboutSection() {
 
           <div className="absolute bottom-6 left-6 z-20">
             <p
-              className="font-display text-white leading-none tracking-wide"
+              className="font-display text-white leading-none"
               style={{ fontSize: "1.1rem", opacity: 0.5 }}
             >
               Bryan Berlandro
             </p>
           </div>
-        </motion.div>
+        </m.div>
 
         <Reveal delay={0.3} className="shrink-0">
           <div
-            className="flex flex-row lg:flex-col h-full gap-[1.5px]"
+            className="grid grid-cols-3 lg:grid-cols-1 h-full gap-[1.5px]"
             style={{ background: "rgba(10,10,10,0.08)" }}
           >
             {stats.map((s, i) => (
-              <motion.div
+              <m.div
                 key={s.label}
-                className="group flex flex-col justify-between px-8 py-8 flex-1 transition-colors duration-300 cursor-none"
-                style={{ background: "var(--color-surface)", minWidth: 160 }}
-                whileHover={{ backgroundColor: "#0A0A0A" }}
+                className="group flex flex-col justify-between gap-6 px-4 py-6 sm:px-8 sm:py-8 lg:min-w-[160px] transition-colors duration-300 hover:bg-[#0A0A0A]"
+                style={{ background: "var(--color-surface)" }}
               >
                 <p
                   className="font-display leading-none transition-colors duration-300 group-hover:text-white"
@@ -181,7 +189,7 @@ export function AboutSection() {
                 </p>
                 <div>
                   <p
-                    className="font-mono text-[0.56rem] tracking-[0.16em] uppercase mt-2 transition-colors duration-300 group-hover:text-white/40"
+                    className="font-mono text-[0.75rem] tracking-[0.01em] mt-2 transition-colors duration-300 group-hover:text-white/60"
                     style={{ color: "var(--color-muted)" }}
                   >
                     {s.label}
@@ -190,17 +198,17 @@ export function AboutSection() {
                     className="mt-3 h-px w-full overflow-hidden"
                     style={{ background: "rgba(10,10,10,0.08)" }}
                   >
-                    <motion.div
+                    <m.div
                       className="h-full group-hover:bg-white/30 transition-colors duration-300"
-                      style={{ background: "var(--color-ink)" }}
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${[88, 72, 95, 98][i]}%` }}
+                      style={{ background: "var(--color-ink)", transformOrigin: "left" }}
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
                       viewport={{ once: true }}
                       transition={{ duration: 1.2, delay: 0.4 + i * 0.1, ease }}
                     />
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </Reveal>
@@ -213,17 +221,16 @@ export function AboutSection() {
           style={{ background: "var(--color-paper)" }}
         >
           {[
-            { label: "Based in",     value: "Depok, Indonesia" },
-            { label: "Available",    value: "Full-time & Freelance" },
-            { label: "Speaks",       value: "Indonesian, English" },
-            { label: "Response",     value: "Within 24 hours" },
+            { label: "Based in",   value: "Depok, Indonesia" },
+            { label: "Role",       value: "UI/UX Designer & Fullstack Developer" },
+            { label: "Experience", value: "3 Years" },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-3">
               <span className="w-[4px] h-[4px] rounded-full shrink-0" style={{ background: "var(--color-muted)" }} />
-              <span className="font-mono text-[0.56rem] tracking-[0.14em] uppercase" style={{ color: "var(--color-muted)" }}>
+              <span className="font-mono text-[0.75rem] tracking-[0.01em]" style={{ color: "var(--color-muted)" }}>
                 {item.label}
               </span>
-              <span className="font-mono text-[0.6rem] tracking-[0.1em] uppercase" style={{ color: "var(--color-ink)" }}>
+              <span className="font-mono text-[0.78rem] tracking-[0.01em]" style={{ color: "var(--color-ink)" }}>
                 {item.value}
               </span>
             </div>

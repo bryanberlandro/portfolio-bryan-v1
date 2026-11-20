@@ -1,5 +1,3 @@
-"use client";
-
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { testimonials } from "@/data/portfolio";
@@ -9,8 +7,8 @@ export function TestimonialsSection() {
     <section id="testimonials" className="px-10 py-28" style={{ background: "var(--color-paper)" }}>
       <Reveal><SectionLabel>Client Reviews</SectionLabel></Reveal>
       <Reveal delay={0.1}>
-        <h2 className="font-display leading-[0.9] tracking-tight" style={{ fontSize: "clamp(3rem,6vw,6.5rem)" }}>
-          WHAT CLIENTS<br /><span className="text-outline">SAY</span>
+        <h2 className="font-display leading-[0.9]" style={{ fontSize: "clamp(2.5rem,6.2vw,5.75rem)" }}>
+          What clients<br /><span style={{ fontWeight: 300 }}>say</span>
         </h2>
       </Reveal>
 
@@ -43,7 +41,7 @@ export function TestimonialsSection() {
                 <p className="font-medium text-[0.9rem]" style={{ color: "var(--color-ink)" }}>
                   {t.author}
                 </p>
-                <p className="font-mono text-[0.58rem] tracking-[0.14em] uppercase mt-1" style={{ color: "var(--color-muted)" }}>
+                <p className="font-mono text-[0.75rem] tracking-[0.01em] mt-1" style={{ color: "var(--color-muted)" }}>
                   {t.role} · {t.company}
                 </p>
               </div>

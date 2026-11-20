@@ -1,48 +1,47 @@
 export const personal = {
-  name: "Bryan Berlandro Godlive Sibuea",
-  role: "Designer & Developer",
-  tagline: "EXPLORE MY PORTFOLIO",
-  established: "Est. 2020",
+  name: "Bryan Berlandro Godlive",
+  role: "UI/UX Designer & Fullstack Developer",
+  experience: "3 Years of Experience",
+  heroIntro:
+    "I design interfaces in Figma and build them with React, Next.js, and Node.js. Three years of making websites and web apps that are clear to use and easy to maintain.",
   bio: [
-    "I'm a freelance designer & developer with a sharp eye for aesthetics and a passion for building digital products that feel as good as they look.",
-    "Every project is an opportunity to push boundaries — combining bold typography, clean structure, and thoughtful interactions into experiences people remember.",
+    "I'm a UI/UX designer and fullstack developer based in Depok, Indonesia. I design in Figma and build with React, Next.js, Node.js, and Express, so an idea can go from first sketch to a live site in one pair of hands.",
+    "Over the past three years I've worked on company profile sites, agency websites, and a community platform. I care about clear structure, readable type, and layouts that hold up on every screen size.",
   ],
   email: "bryanberlandro@gmail.com",
   location: "Depok, Indonesia",
 };
 
 export const stats = [
-  { number: "5M+",  label: "Success Projects" },
-  { number: "3K+",  label: "Product Launches" },
-  { number: "24+",  label: "Years Experience" },
-  { number: "98%",  label: "Client Satisfaction" },
+  { number: "8", label: "Success Projects" },
+  { number: "3", label: "Product Launches" },
+  { number: "3", label: "Years Experience" },
 ];
 
 export const skills = [
-  "UI / UX",
+  "UI/UX Design",
   "Web Design",
-  "Landing Page",
-  "UI Design Figma",
-  "Expert Webflow",
+  "Frontend Development",
+  "Fullstack Development",
+  "Responsive Web Development",
 ];
 
-// ─── SKILLS & TOOLS ──────────────────────────────────────────────────
+// ─── WHAT I WORK WITH ────────────────────────────────────────────────
 export const toolCategories = [
-  {
-    category: "Design",
-    tools: ["Figma", "Adobe XD", "Illustrator", "Photoshop", "After Effects", "Principle"],
-  },
+  { category: "Design", tools: ["Figma"] },
   {
     category: "Development",
-    tools: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Node.js"],
+    tools: ["HTML", "CSS", "JavaScript", "React", "Next.js", "Node.js", "Express.js"],
   },
   {
-    category: "Platform",
-    tools: ["Webflow", "Framer", "WordPress", "Shopify", "Vercel", "Netlify"],
-  },
-  {
-    category: "Other",
-    tools: ["Git", "Notion", "Linear", "Slack", "Lottie", "GSAP"],
+    category: "Skills",
+    tools: [
+      "UI/UX Design",
+      "Web Design",
+      "Frontend Development",
+      "Fullstack Development",
+      "Responsive Web Development",
+    ],
   },
 ];
 
@@ -51,7 +50,7 @@ export const experiences = [
   {
     company: "Transhaka Dunia Teknologi Indonesia",
     role: "Front-End Developer & UI/UX Designer",
-    period: "2024 — Present",
+    period: "2024 to Present",
     location: "Indonesia",
     description:
       "Led the design and front-end development of a corporate technology website, focusing on building a modern, responsive, and user-friendly digital experience. Responsible for translating business needs into intuitive interfaces and ensuring optimal performance across devices.",
@@ -77,7 +76,7 @@ export const experiences = [
   {
     company: "CurhatinAja",
     role: "Full Stack Developer",
-    period: "2025 — Present",
+    period: "2025 to Present",
     location: "Indonesia",
     description:
       "Built and developed an anonymous sharing platform designed to help users express thoughts and emotions safely. Responsible for end-to-end development including UI/UX design, backend architecture, and feature implementation.",
@@ -215,7 +214,7 @@ export const projects = [
     outcome:
       "Delivered a scalable and responsive website that enhances company visibility and presents services in a clear and professional manner.",
     tech: ["ReactJS", "Node.js", "Express", "MongoDB", "Figma"],
-    liveUrl: "#",
+    liveUrl: null,
     githubUrl: null,
     dark: true,
     featured: true,
@@ -227,33 +226,28 @@ export const projects = [
 export const services = [
   {
     num: "01",
-    name: "UI / UX Design",
-    desc: "Research-driven interfaces that are beautiful and convert. From wireframes to pixel-perfect design.",
+    name: "UI/UX Design",
+    desc: "Wireframes, user flows, and high-fidelity interfaces designed in Figma, with clear structure and readable hierarchy.",
   },
   {
     num: "02",
-    name: "Web Design & Dev",
-    desc: "Full-stack web builds using Next.js, Tailwind, and Framer Motion. Fast, accessible, and memorable.",
+    name: "Web Design",
+    desc: "Websites for companies, agencies, and products, designed to present content clearly and feel consistent from page to page.",
   },
   {
     num: "03",
-    name: "Landing Page Design",
-    desc: "High-converting landing pages built to turn visitors into customers — with speed and precision.",
+    name: "Frontend Development",
+    desc: "Interfaces built with HTML, CSS, JavaScript, React, and Next.js, kept clean and easy to maintain.",
   },
   {
     num: "04",
-    name: "UI Design in Figma",
-    desc: "Clean, scalable Figma files with components, auto layout, and developer-ready handoff.",
+    name: "Fullstack Development",
+    desc: "Web applications with a Node.js and Express backend, from database and authentication to the finished interface.",
   },
   {
     num: "05",
-    name: "Mobile App Design",
-    desc: "iOS and Android UI design with full prototype, interaction design, and design system.",
-  },
-  {
-    num: "06",
-    name: "Brand Identity",
-    desc: "Logo, typography, colour system, and brand guidelines that position you for growth.",
+    name: "Responsive Web Development",
+    desc: "Layouts that work properly on desktop, tablet, and mobile, tested across screen sizes before launch.",
   },
 ];
 
@@ -262,31 +256,31 @@ export const process = [
   {
     num: "01",
     title: "Discovery",
-    desc: "Deep dive into your goals, users, and market. I ask the right questions before touching a single pixel.",
+    desc: "Understanding the goals, the users, and the content before any design work starts.",
   },
   {
     num: "02",
     title: "Strategy",
-    desc: "Define the information architecture, user flows, and technical approach. No guessing, only intentional decisions.",
+    desc: "Defining the page structure, user flows, and technical approach so each decision has a reason.",
   },
   {
     num: "03",
     title: "Design",
-    desc: "High-fidelity UI design with full component system, motion direction, and dev-ready specs.",
+    desc: "High-fidelity interface design in Figma, with reusable components and clear specs for development.",
   },
   {
     num: "04",
     title: "Build",
-    desc: "Clean, performant code. Next.js, Tailwind, Framer Motion — or Webflow/Framer for no-code builds.",
+    desc: "Clean, maintainable code with React, Next.js, and Node.js, built to match the design closely.",
   },
   {
     num: "05",
     title: "Launch & Iterate",
-    desc: "Deploy, monitor, and improve. Data-backed iterations based on real user behaviour.",
+    desc: "Deploy the site, check how it performs, and keep improving it after release.",
   },
 ];
 
-// ─── TESTIMONIALS ─────────────────────────────────────────────────────
+// ─── TESTIMONIALS (placeholder content, NOT rendered. Replace with real quotes before re-enabling) ───
 export const testimonials = [
   {
     quote:
@@ -311,10 +305,13 @@ export const testimonials = [
   },
 ];
 
-export const socials = [
+// href: null means "no verified profile URL yet". The UI is kept, but it renders as a
+// non-link. Replace null with the real https:// profile URL to activate it (it will
+// then also be added to the Person JSON-LD sameAs automatically).
+export const socials: { label: string; href: string | null }[] = [
   { label: "Instagram", href: "https://www.instagram.com/brynberlandro" },
-  { label: "Dribbble", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "Behance", href: "#" },
+  { label: "Dribbble", href: null },
+  { label: "LinkedIn", href: null },
+  { label: "Behance", href: null },
   { label: "GitHub", href: "https://github.com/bryanberlandro" },
 ];
